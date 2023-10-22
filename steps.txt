@@ -1,0 +1,11 @@
+1.Start parsing regular txt files
+
+2. Read the docx xml as plain text but keeping the formatting, I will try to convert to a .rtf file because thats the most similar
+
+3. Insert test data in word keeping the formatting.
+
+4.If the object they want to insert is an array do a loop and let them access their properties inside.
+
+5.Add conditionals
+
+

@@ -1,0 +1,24 @@
+{
+  "name": "wordtemplater",
+  "version": "1.0.0",
+  "description": "Program that lets you create templates for a word Document using Bun (probably)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sagastvme/wordTemplater.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sagastvme/wordTemplater/issues"
+  },
+  "homepage": "https://github.com/sagastvme/wordTemplater#readme",
+  "dependencies": {
+    "libreoffice-convert": "^1.4.1",
+    "mammoth": "^1.6.0"
+  }
+}
