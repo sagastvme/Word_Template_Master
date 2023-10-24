@@ -1,26 +1,44 @@
-'use strict';
+const { DOMParser } = require('xmldom');
+const xpath = require("xpath");
+const JsZip = require("jszip");
+const fs = require("fs");
 
-const path = require('path');
-const fs = require('fs').promises;
-
-const libre = require('libreoffice-convert');
-libre.convertAsync = require('util').promisify(libre.convert);
+// Need to add declare:
+let docxInputPath = "./test.docx";
+let strOutputPath = "./final.docx";
 
 async function main() {
-    const ext = '.rtf'
-    const inputPath = path.join(__dirname, '/test.docx');
-    const outputPath = path.join(__dirname, `/example${ext}`);
-
-    // Read file
-    const docxBuf = await fs.readFile(inputPath);
-
-    // Convert it to pdf format with undefined filter (see Libreoffice docs about filter)
-    let pdfBuf = await libre.convertAsync(docxBuf, ext, undefined);
-    
-    // Here in done you have pdf file which you can save or transfer in another stream
-    await fs.writeFile(outputPath, pdfBuf);
+  // Read the docx internal xdocument
+  let wSelect = xpath.useNamespaces({ "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main" });
+  let docxFile = fs.readFileSync(docxInputPath);
+  await JsZip.loadAsync(docxFile).then(async (zip) => {
+    await zip.file('word/document.xml').async("string").then(docx_str => {
+      let docx = new DOMParser().parseFromString(docx_str);
+      let outputString = "";
+      let paragraphElements = wSelect("//w:p", docx); // Remove "this." before wSelect
+      paragraphElements.forEach(paragraphElement => {
+        let textElements = wSelect(".//w:t", paragraphElement); // Remove "this." before wSelect
+        let commandsFound = detectCommands(textElements);
+        if(commandsFound.length>0){
+            console.log('this row has some valid elements => ', commandsFound)
+        }
+      });
+    });
+  });
 }
 
-main().catch(function (err) {
-    console.log(`Error converting file: ${err}`);
-});
+(async () => {
+  await main();
+})();
+
+function detectCommands(textElements) {
+    let array = [];
+    const regex = /{[^{}]+}/g;
+    textElements.forEach((element) => {
+        const matches = element.textContent.match(regex);
+        if (matches) {
+            array.push(element.textContent);
+        }
+    });
+    return array;
+}
