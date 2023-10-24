@@ -2,6 +2,8 @@ const { DOMParser } = require('xmldom');
 const xpath = require("xpath");
 const JsZip = require("jszip");
 const fs = require("fs");
+const { markAsUntransferable } = require('worker_threads');
+const { match } = require('assert');
 
 // Need to add declare:
 let docxInputPath = "./test.docx";
@@ -19,8 +21,8 @@ async function main() {
       paragraphElements.forEach(paragraphElement => {
         let textElements = wSelect(".//w:t", paragraphElement); // Remove "this." before wSelect
         let commandsFound = detectCommands(textElements);
-        if(commandsFound.length>0){
-            console.log('this row has some valid elements => ', commandsFound)
+        if (commandsFound.length > 0) {
+          executeCommand(paragraphElement, wSelect);
         }
       });
     });
@@ -32,13 +34,47 @@ async function main() {
 })();
 
 function detectCommands(textElements) {
-    let array = [];
-    const regex = /{[^{}]+}/g;
-    textElements.forEach((element) => {
-        const matches = element.textContent.match(regex);
-        if (matches) {
-            array.push(element.textContent);
-        }
-    });
-    return array;
+  let array = [];
+  const regex = /{[^{}]+}/g;
+  textElements.forEach((element) => {
+    console.log(element.textContent)
+    const matches = element.textContent.match(regex);
+    if (matches) {
+      array.push(element.textContent);
+    }
+  });
+  return array;
 }
+
+function executeCommand(paragraphElement, wSelect) {
+  let textElements = wSelect(".//w:t", paragraphElement);
+  textElements.forEach((element) => {
+    if (hasCommand(element)) {
+      executeCertainCommand(element);
+    }
+  });
+}
+
+function hasCommand(textElement) {
+  const regex = /{[^{}]+}/g;
+  const matches = textElement.textContent.match(regex);
+  return matches;
+}
+
+function executeCertainCommand(textElement) {
+  console.log('this element has a command lol => ', textElement.textContent)
+let totalBrackets = countBrackets(textElement.textContent);
+console.log('total brackets of this line ', textElement.textContent, ' = ', totalBrackets)
+}
+
+function countBrackets(str) {
+    const openBraceCount = (str.match(/{/g) || []).length;
+    const closeBraceCount = (str.match(/}/g) || []).length;
+    
+    // Ensure that the number of opening and closing braces match to count complete pairs
+    if (openBraceCount === closeBraceCount) {
+      return openBraceCount;
+    } else {
+      return -1; // Indicates that the brackets are not properly matched
+    }
+  }
