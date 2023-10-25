@@ -1,36 +1,18 @@
-const fs = require("fs");
-const JsZip = require("jszip");
-const { DOMParser, XMLSerializer } = require('xmldom');
-const xpath = require("xpath");
-
+//main.js only executes the programar
+const fs = require("fs");const JsZip = require("jszip");const { DOMParser, XMLSerializer } = require('xmldom');const xpath = require("xpath");
+const check = require('./checkForCommands/check');
+const execute = require('./replaceCommands/execute');
 const docxInputPath = "./test.docx";
 const strOutputPath = "./final.docx";
-
 const object = {
   'lastName': 'Sagastume',
-  'name': 'Eduardo',
+  'firstName': 'Eduardo',
   'secondName': 'Gomara',
   'midName': 'Anibal'
 }
 
-function findCommand(textElement) {
-  const regex = /{([^{}]+)}/g;
-  const matches = textElement.textContent.match(regex);
-  let modifiedText = textElement.textContent;
 
-  if (matches) {
-    matches.forEach(match => {
-      const command = match.slice(1, -1); // Remove curly braces
-      if (object.hasOwnProperty(command)) {
-        // Replace the command call with the corresponding object value
-        modifiedText = modifiedText.replace(match, object[command]);
-      }
-    });
 
-    // Now, `modifiedText` contains the text with the command calls replaced
-    textElement.textContent = modifiedText;
-  }
-}
 
 async function main() {
   let wSelect = xpath.useNamespaces({ "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main" });
@@ -42,9 +24,9 @@ async function main() {
       let paragraphElements = wSelect("//w:p", docx);
       paragraphElements.forEach(paragraphElement => {
         let textElements = wSelect(".//w:t", paragraphElement);
-        let commandsFound = detectCommands(textElements);
+        let commandsFound = check.detectCommands(textElements);
         if (commandsFound.length > 0) {
-          executeCommand(paragraphElement, wSelect);
+          execute.executeCommand(paragraphElement, wSelect, object);
         }
       });
 
@@ -60,32 +42,11 @@ async function main() {
   });
 }
 
-function detectCommands(textElements) {
-  let array = [];
-  const regex = /{[^{}]+}/g;
-  textElements.forEach((element) => {
-    const matches = element.textContent.match(regex);
-    if (matches) {
-      array.push(element);
-    }
-  });
-  return array;
-}
 
-function executeCommand(paragraphElement, wSelect) {
-  let textElements = wSelect(".//w:t", paragraphElement);
-  textElements.forEach((element) => {
-    if (hasCommand(element)) {
-      findCommand(element);
-    }
-  });
-}
 
-function hasCommand(textElement) {
-  const regex = /{[^{}]+}/g;
-  const matches = textElement.textContent.match(regex);
-  return matches;
-}
+
+
+
 
 (async () => {
   await main();
