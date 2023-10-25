@@ -1,46 +1,72 @@
-const { DOMParser } = require('xmldom');
-const xpath = require("xpath");
-const JsZip = require("jszip");
 const fs = require("fs");
-const { markAsUntransferable } = require('worker_threads');
-const { match } = require('assert');
+const JsZip = require("jszip");
+const { DOMParser, XMLSerializer } = require('xmldom');
+const xpath = require("xpath");
 
-// Need to add declare:
-let docxInputPath = "./test.docx";
-let strOutputPath = "./final.docx";
+const docxInputPath = "./test.docx";
+const strOutputPath = "./final.docx";
+
+const object = {
+  'lastName': 'Sagastume',
+  'name': 'Eduardo',
+  'secondName': 'Gomara',
+  'midName': 'Anibal'
+}
+
+function findCommand(textElement) {
+  const regex = /{([^{}]+)}/g;
+  const matches = textElement.textContent.match(regex);
+  let modifiedText = textElement.textContent;
+
+  if (matches) {
+    matches.forEach(match => {
+      const command = match.slice(1, -1); // Remove curly braces
+      if (object.hasOwnProperty(command)) {
+        // Replace the command call with the corresponding object value
+        modifiedText = modifiedText.replace(match, object[command]);
+      }
+    });
+
+    // Now, `modifiedText` contains the text with the command calls replaced
+    textElement.textContent = modifiedText;
+  }
+}
 
 async function main() {
-  // Read the docx internal xdocument
   let wSelect = xpath.useNamespaces({ "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main" });
   let docxFile = fs.readFileSync(docxInputPath);
   await JsZip.loadAsync(docxFile).then(async (zip) => {
     await zip.file('word/document.xml').async("string").then(docx_str => {
       let docx = new DOMParser().parseFromString(docx_str);
       let outputString = "";
-      let paragraphElements = wSelect("//w:p", docx); // Remove "this." before wSelect
+      let paragraphElements = wSelect("//w:p", docx);
       paragraphElements.forEach(paragraphElement => {
-        let textElements = wSelect(".//w:t", paragraphElement); // Remove "this." before wSelect
+        let textElements = wSelect(".//w:t", paragraphElement);
         let commandsFound = detectCommands(textElements);
         if (commandsFound.length > 0) {
           executeCommand(paragraphElement, wSelect);
         }
       });
+
+      // Save the modified document back to the final output file
+      const modifiedDocx = new XMLSerializer().serializeToString(docx);
+      zip.file('word/document.xml', modifiedDocx);
+      zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
+        .pipe(fs.createWriteStream(strOutputPath))
+        .on('finish', () => {
+          console.log('Modified docx written to ' + strOutputPath);
+        });
     });
   });
 }
-
-(async () => {
-  await main();
-})();
 
 function detectCommands(textElements) {
   let array = [];
   const regex = /{[^{}]+}/g;
   textElements.forEach((element) => {
-    console.log(element.textContent)
     const matches = element.textContent.match(regex);
     if (matches) {
-      array.push(element.textContent);
+      array.push(element);
     }
   });
   return array;
@@ -50,7 +76,7 @@ function executeCommand(paragraphElement, wSelect) {
   let textElements = wSelect(".//w:t", paragraphElement);
   textElements.forEach((element) => {
     if (hasCommand(element)) {
-      executeCertainCommand(element);
+      findCommand(element);
     }
   });
 }
@@ -61,20 +87,6 @@ function hasCommand(textElement) {
   return matches;
 }
 
-function executeCertainCommand(textElement) {
-  console.log('this element has a command lol => ', textElement.textContent)
-let totalBrackets = countBrackets(textElement.textContent);
-console.log('total brackets of this line ', textElement.textContent, ' = ', totalBrackets)
-}
-
-function countBrackets(str) {
-    const openBraceCount = (str.match(/{/g) || []).length;
-    const closeBraceCount = (str.match(/}/g) || []).length;
-    
-    // Ensure that the number of opening and closing braces match to count complete pairs
-    if (openBraceCount === closeBraceCount) {
-      return openBraceCount;
-    } else {
-      return -1; // Indicates that the brackets are not properly matched
-    }
-  }
+(async () => {
+  await main();
+})();
