@@ -28,6 +28,8 @@ function detectCommands(textElements) {
         if (object.hasOwnProperty(command)) {
           // Replace the command call with the corresponding object value
           modifiedText = modifiedText.replace(match, object[command]);
+        }else{
+          modifiedText = modifiedText.replace(match, `***We couldnt find ${command} in the values you passed us***`);
         }
       });
   
