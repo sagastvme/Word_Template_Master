@@ -7,12 +7,13 @@ const strOutputPath = "./final.docx";
 const object = {
   'lastName': 'Sagastume',
   'firstName': 'Eduardo',
-  'secondName': 'Gomara',
+  'secondName': ['a','b','c'],
   'midName': 'Anibal'
 }
 
 
 
+const startTime = performance.now();
 
 async function main() {
   let wSelect = xpath.useNamespaces({ "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main" });
@@ -37,6 +38,12 @@ async function main() {
         .pipe(fs.createWriteStream(strOutputPath))
         .on('finish', () => {
           console.log('Modified docx written to ' + strOutputPath);
+          const endTime = performance.now();
+
+          // Calculate and log the execution time
+          const executionTime = endTime - startTime;
+          console.log(`Script execution time: ${executionTime} milliseconds`);
+       
         });
     });
   });
