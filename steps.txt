@@ -1,10 +1,19 @@
-3. Insert test data in word keeping the formatting.
+3. Detect if the command only wants to replace a value, or if the command is an array and wants to access its properties or if the command is calling a fn like name|pascal or check if they are calling a property of the object like array.length, let them add an if if array[2] is false or something like that;
 
 4. Add conditionals;
 
 
-4.If the object they want to insert is an array do a loop and let them access their properties inside.
+5.If the object they want to insert is an array do a loop and let them access their properties inside.
 
-5.Add conditionals
+6. Import other files
+
+7. Work in footers and headers
+
+8. Convert json that the users passes to a map
+
+9. Make date functions, name functions, pascal and stuff like that, todaysDate etc.
+
+10. Have basic templates that users can checkout like a cover letter for example.
 
 
+11. Let them choose the format they want to export the files with libreoffice converter.
