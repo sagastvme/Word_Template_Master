@@ -23,11 +23,11 @@ function detectCommands(textElements) {
         console.log('the match i found = ', match)
         const command = match.slice(1, -1).replace(/\s/g, ''); // Remove all spaces
         console.log('the command I found =', command);
-        
+        let valueToInsert = object.get(command);
 
-        if (object.hasOwnProperty(command)) {
+        if (valueToInsert) {
           // Replace the command call with the corresponding object value
-          modifiedText = modifiedText.replace(match, object[command]);
+          modifiedText = modifiedText.replace(match, valueToInsert);
         }else{
           modifiedText = modifiedText.replace(match, `***We couldnt find ${command} in the values you passed us***`);
         }

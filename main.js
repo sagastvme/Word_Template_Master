@@ -4,12 +4,12 @@ const check = require('./checkForCommands/check');
 const execute = require('./replaceCommands/execute');
 const docxInputPath = "./test.docx";
 const strOutputPath = "./final.docx";
-const object = {
-  'lastName': 'Sagastume',
-  'firstName': 'Eduardo',
-  'secondName': ['a','b','c'],
-  'midName': 'Anibal'
-}
+const object = new Map([
+  ['lastName', 'Sagastume'],
+  ['firstName', 'Eduardo'],
+  ['secondName', ['a', 'b', 'c']],
+  ['midName', 'Anibal']
+]);
 
 
 
