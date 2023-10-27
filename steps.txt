@@ -1,3 +1,10 @@
+1. Create a new branch with only string manipulation
+
+1. Move from xml to plain text and thats it.
+
+2. Come up with tag names for conditionals, loops, and only swapping for a value
+
+
 3. Detect if the command only wants to replace a value, or if the command is an array and wants to access its properties or if the command is calling a fn like name|pascal or check if they are calling a property of the object like array.length, let them add an if if array[2] is false or something like that;
 
 4. Add conditionals;
