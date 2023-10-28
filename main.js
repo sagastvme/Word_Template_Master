@@ -21,7 +21,7 @@ async function main() {
   let docxFile = fs.readFileSync(docxInputPath);
 
   await JsZip.loadAsync(docxFile).then(async (zip) => {
-    await zip.file('word/document.xml').async("string").then(docx_str => {
+    await zip.file('word/document.xml').async("string").then(async docx_str => {
       // Look for imports TO DO
 console.log(docx_str)
       // Conditionals && loops
@@ -32,13 +32,8 @@ console.log(docx_str)
       let logs = results.logs
       console.log('logs = ', logs)
       logs = logs.join('\n');
-fs.writeFile('./ERRORS.log', logs, (err) => {
-  if (err) {
-    console.error('Error writing logs to ERRORS.log:', err);
-  } else {
-    console.log('Logs written to ERRORS.log');
-  }
-});
+      await Bun.write("ERRORS.log", logs);
+
       // console.log('logs = ', results.logs)
       zip.file('word/document.xml', modifiedDocx);
 
