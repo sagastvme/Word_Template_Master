@@ -18,12 +18,12 @@ const data = new Map([
 const startTime = performance.now();
 
 async function main() {
-  let docxFile = fs.readFileSync(docxInputPath);
-
+  // let docxFile = fs.readFileSync(docxInputPath);
+  const docxFile = Buffer.from(await Bun.file(docxInputPath).arrayBuffer());
   await JsZip.loadAsync(docxFile).then(async (zip) => {
     await zip.file('word/document.xml').async("string").then(async docx_str => {
       // Look for imports TO DO
-console.log(docx_str)
+      console.log(docx_str)
       // Conditionals && loops
 
       // Replace simple values
