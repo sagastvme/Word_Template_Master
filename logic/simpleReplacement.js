@@ -6,17 +6,13 @@ function replaceTagsWithValue(docx_str, data) {
     const replacedString =  docx_str.replace(regex, function(match) {
         let tag = match.substring(1, match.length - 1); // Remove the curly braces {}
         tag = tag.replace(/\s+/g, ''); // Remove all whitespaces
-        console.log('the tag = ', tag)
         if (data.get(tag)) {
-            console.log('inif')
             return data.get(tag);
         }
-        console.log('else')
-        logs.push(tag)
-      let similar =   possibleTypo(tag, dataKeys)
-      console.log('maybe you meant , ', similar)  
+      let typos =   possibleTypo(tag, dataKeys)
+      logs.push(`Couldn't parse ${tag} maybe you meant ${typos}`)
       // If the tag is not found in 'data', you can choose to leave it as is or replace it with an empty string.
-        return 'PROPERTY_NOT_FOUND';
+        return 'PROPERTY_NOT_FOUND_CHECK_ERRORS.log';
     });
 
     return {replacedString, logs}
