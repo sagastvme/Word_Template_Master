@@ -1,10 +1,11 @@
 //main.js only executes the programar
 const fs = require("fs");const JsZip = require("jszip");const { DOMParser, XMLSerializer } = require('xmldom');const xpath = require("xpath");
-const check = require('./checkForCommands/check');
-const execute = require('./replaceCommands/execute');
+
+const simpleReplacement = require('./logic/simpleReplacement')
+
 const docxInputPath = "./test.docx";
 const strOutputPath = "./final.docx";
-const object = new Map([
+const data = new Map([
   ['lastName', 'Sagastume'],
   ['firstName', 'Eduardo'],
   ['secondName', ['a', 'b', 'c']],
@@ -16,35 +17,18 @@ const object = new Map([
 const startTime = performance.now();
 
 async function main() {
-  let wSelect = xpath.useNamespaces({ "w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main" });
   let docxFile = fs.readFileSync(docxInputPath);
   await JsZip.loadAsync(docxFile).then(async (zip) => {
     await zip.file('word/document.xml').async("string").then(docx_str => {
-      let docx = new DOMParser().parseFromString(docx_str);
-      let outputString = "";
-      let paragraphElements = wSelect("//w:p", docx);
-      paragraphElements.forEach(paragraphElement => {
-        let textElements = wSelect(".//w:t", paragraphElement);
-        let commandsFound = check.detectCommands(textElements);
-        if (commandsFound.length > 0) {
-          execute.executeCommand(paragraphElement, wSelect, object);
-        }
-      });
+    //look for imports TO DO
 
-      // Save the modified document back to the final output file
-      const modifiedDocx = new XMLSerializer().serializeToString(docx);
-      zip.file('word/document.xml', modifiedDocx);
-      zip.generateNodeStream({ type: 'nodebuffer', streamFiles: true })
-        .pipe(fs.createWriteStream(strOutputPath))
-        .on('finish', () => {
-          console.log('Modified docx written to ' + strOutputPath);
-          const endTime = performance.now();
+//conditionals && loops
 
-          // Calculate and log the execution time
-          const executionTime = endTime - startTime;
-          console.log(`Script execution time: ${executionTime} milliseconds`);
-       
-        });
+//replace simple values
+let results = simpleReplacement.replaceTagsWithValue(docx_str, data)
+let proccesedDoc = results.replacedString;
+// console.log('logs = ', results.logs)
+
     });
   });
 }
