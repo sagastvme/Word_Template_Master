@@ -23,7 +23,7 @@ async function main() {
   await JsZip.loadAsync(docxFile).then(async (zip) => {
     await zip.file('word/document.xml').async("string").then(docx_str => {
       // Look for imports TO DO
-
+console.log(docx_str)
       // Conditionals && loops
 
       // Replace simple values

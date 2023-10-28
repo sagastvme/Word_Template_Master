@@ -1,4 +1,4 @@
-1.TEST FOOTERS
+1.TEST FOOTERS = Couldnt replace values maybe they are in a different value than document.xml
 2. Come up with tag names for conditionals, loops, and only swapping for a value
 3. Detect if the command only wants to replace a value, or if the command is an array and wants to access its properties or if the command is calling a fn like name|pascal or check if they are calling a property of the object like array.length, let them add an if if array[2] is false or something like that;
 4. Add conditionals;
