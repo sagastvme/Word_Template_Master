@@ -1,4 +1,6 @@
-1. Create a new branch with only string manipulation
+1. Create a new branch with only string manipulation;
+
+Test in new branch commit;
 
 1. Move from xml to plain text and thats it.
 
