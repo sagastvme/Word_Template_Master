@@ -30,8 +30,7 @@ function evaluateCondition(condition, data) {
         // Check if the operator is one of the supported symbols
         if (['==', '>=', '<=', '!='].includes(operator)) {
             // Evaluate the condition based on the operator
-         console.log('left ', leftOperand);
-         console.log('r ', rightOperand)
+      
             switch (operator) {
                 case '==':
                     console.log(leftOperand == rightOperand)
@@ -79,11 +78,14 @@ function lookForTags(file) {
 function callsMethod(string, data) {
     //support multiple fn calls like toLowerCase().trim().indexOf('.')
     //add something so it writes a wrongMethods txt file whenever theres a typo in the method call like tolowercase();
+    //add something so it tells you what method you may wanted to call?
     const dot = string.indexOf('.');
     if (dot > -1) {
       const objectName = string.substring(0, dot);
-      const methodName = string.substring(dot + 1);
-  
+      let methodName = string.substring(dot + 1)
+      methodName = methodName.includes('()') ? methodName.replace('()', '') : methodName;
+
+
       if (data.has(objectName) && typeof data.get(objectName)[methodName] === 'function') {
         return data.get(objectName)[methodName]();
       } else {

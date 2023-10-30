@@ -2,6 +2,7 @@ TO-DO ADD SOMETHING SO DEPENDING ON THE FILE EXTENSION IT DOES DIFFERENTE METHOD
 TEMPLATES IN .TXT OT .DOCX FOR EXAMPLE
 
 
+
 TAGS IN MY TEMPLATE
 simple value = {lastName}
 loops = {@foreach(array)} (#if(true)) The value is true {value} {#else} We need the property {#endif}  {@endforeach}
@@ -22,3 +23,4 @@ Multiple conditions in one if;
 9. Make date functions, name functions, pascal and stuff like that, todaysDate etc.
 10. Have basic templates that users can checkout like a cover letter for example.
 11. Let them choose the format they want to export the files with libreoffice converter.
+12.specify in documentation that you can run methods with parenthesis or without like lastName.trim() or lastName.trim

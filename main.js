@@ -9,7 +9,7 @@ const {processFile} = require('./logic/process')
 const docxInputPath = "./edu.docx";
 const strOutputPath = "./final.docx";
 const data = new Map([
-  ['lastName', 'Sagastume'],
+  ['lastName', '            Sagastume'],
   ['firstName', 'Eduardo'],
   ['secondName', ['a', 'b', 'c']],
   ['midName', 'Anibal']
