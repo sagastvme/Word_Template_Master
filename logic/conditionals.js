@@ -16,36 +16,32 @@ function processConditionals(file, data) {
 }
 
 function evaluateCondition(condition, data) {
-    console.log('not found condition lol')
     // Split the condition into parts based on the conditional symbols
     const parts = condition.split(/(==|>=|<=|!=)/);
 
     // Trim and sanitize the parts
     const sanitizedParts = parts.map(part => removeXmlTags(part));
-    console.log(sanitizedParts)
     // Evaluate the condition
     if (sanitizedParts.length === 3) {
-        const leftOperand = removeXmlTags(sanitizedParts[0]);
-        const operator = removeXmlTags(sanitizedParts[1]);
-        let rightOperand = removeXmlTags(sanitizedParts[2].replace(/['"`’]/g, ''));
+        const leftOperand = callsMethod(sanitizedParts[0], data);
+        const operator = sanitizedParts[1];
+        let rightOperand = sanitizedParts[2].replace(/['"`’]/g, '');
 
         // Check if the operator is one of the supported symbols
         if (['==', '>=', '<=', '!='].includes(operator)) {
             // Evaluate the condition based on the operator
-            let dataChecked = data.get(leftOperand)
+         console.log('left ', leftOperand);
+         console.log('r ', rightOperand)
             switch (operator) {
                 case '==':
-                    console.log(dataChecked);
-                    console.log(rightOperand)
-                    console.log(dataChecked==rightOperand)
-
-                    return dataChecked == rightOperand;
+                    console.log(leftOperand == rightOperand)
+                    return leftOperand == rightOperand;
                 case '>=':
-                    return dataChecked >= rightOperand;
+                    return leftOperand >= rightOperand;
                 case '<=':
-                    return dataChecked<= rightOperand;
+                    return leftOperand<= rightOperand;
                 case '!=':
-                    return dataChecked != rightOperand;
+                    return leftOperand != rightOperand;
                 default:
                     return false; // Unsupported operator
             }
@@ -78,6 +74,25 @@ function lookForTags(file) {
     
     return matches;
 }
+
+
+function callsMethod(string, data) {
+    //support multiple fn calls like toLowerCase().trim().indexOf('.')
+    //add something so it writes a wrongMethods txt file whenever theres a typo in the method call like tolowercase();
+    const dot = string.indexOf('.');
+    if (dot > -1) {
+      const objectName = string.substring(0, dot);
+      const methodName = string.substring(dot + 1);
+  
+      if (data.has(objectName) && typeof data.get(objectName)[methodName] === 'function') {
+        return data.get(objectName)[methodName]();
+      } else {
+        return 'Method not found or object not in data';
+      }
+    } else {
+      return string;
+    }
+  }
 
 
 

@@ -1,3 +1,7 @@
+TO-DO ADD SOMETHING SO DEPENDING ON THE FILE EXTENSION IT DOES DIFFERENTE METHODS SO EVERYONE CAN HAVE 
+TEMPLATES IN .TXT OT .DOCX FOR EXAMPLE
+
+
 TAGS IN MY TEMPLATE
 simple value = {lastName}
 loops = {@foreach(array)} (#if(true)) The value is true {value} {#else} We need the property {#endif}  {@endforeach}
