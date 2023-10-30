@@ -1,21 +1,19 @@
 //docx_str is the docx body xml treated as a string and data is a map
-function replaceTagsWithValue(docx_str, data) {
+function replaceTagsWithValue(docx_str, data, logs) {
     const regex = /\{[^}]*\}/g;
-    const logs = [];
     let dataKeys = data.keys();
-    const replacedString =  docx_str.replace(regex, function(match) {
-        let tag = match.substring(1, match.length - 1); // Remove the curly braces {}
-        tag = tag.replace(/\s+/g, ''); // Remove all whitespaces
+    const replacedString = docx_str.replace(regex, function (match) {
+        tag = parseTag(match);
         if (data.get(tag)) {
             return data.get(tag);
         }
-      let typos =   possibleTypo(tag, dataKeys)
-      logs.push(`Couldn't parse ${tag} maybe you meant ${typos}`)
-      // If the tag is not found in 'data', you can choose to leave it as is or replace it with an empty string.
+        let typos = possibleTypo(tag, dataKeys)
+        logs.push(`Couldn't parse ${tag} maybe you meant ${typos}`)
+        // If the tag is not found in 'data', you can choose to leave it as is or replace it with an empty string.
         return 'PROPERTY_NOT_FOUND_CHECK_ERRORS.log';
     });
 
-    return {replacedString, logs}
+    return replacedString
 }
 
 function possibleTypo(tag, dataKeys) {
@@ -59,8 +57,29 @@ function levenshteinDistance(a, b) {
     return matrix[a.length][b.length];
 }
 
+function removeWhiteSpaces(tag) {
+    return tag.replace(/\s+/g, '');
 
-module.exports={
+}
+function removeXmlTags(tag) {
+    const regex = /<[^>]+>/g;
+    tag = tag.replace(regex, '');
+    return tag
+}
+
+function removeCurlyBraces(tag) {
+    return tag.substring(1, tag.length - 1); // Remove the curly braces {}
+}
+
+function parseTag(tag) {
+    tag = removeCurlyBraces(tag);
+    tag = removeWhiteSpaces(tag);
+    tag = removeXmlTags(tag)
+    return tag;
+}
+
+
+module.exports = {
     replaceTagsWithValue
 }
 
