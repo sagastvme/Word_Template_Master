@@ -1,6 +1,11 @@
 const fs = require("fs");
 const simpleReplacement = require('./logic/simpleReplacement');
 const {getFile, getZip, readWord} = require('./readFile/getFiles');
+
+
+
+
+
 const docxInputPath = "./edu.docx";
 const strOutputPath = "./final.docx";
 const data = new Map([
@@ -9,6 +14,12 @@ const data = new Map([
   ['secondName', ['a', 'b', 'c']],
   ['midName', 'Anibal']
 ]);
+
+
+
+
+
+
 
 const startTime = performance.now();
 
@@ -28,11 +39,11 @@ async function main() {
 
 
   await packFinalResult(zip, processedBody, processedHeaders, processedFooters);
+  writeLog(logs);
 
   writeFinalResult(zip);
 
-  writeLog(logs);
-
+ 
 
 }
 
