@@ -1,12 +1,6 @@
 const fs = require("fs");
-const JsZip = require("jszip");
-const { DOMParser, XMLSerializer } = require('xmldom');
-const xpath = require("xpath");
-
 const simpleReplacement = require('./logic/simpleReplacement');
-const { error } = require("console");
 const {getFile, getZip, readWord} = require('./readFile/getFiles');
-const { get } = require("http");
 const docxInputPath = "./edu.docx";
 const strOutputPath = "./final.docx";
 const data = new Map([
