@@ -1,7 +1,7 @@
 const fs = require("fs");
 const simpleReplacement = require('./logic/simpleReplacement');
 const {getFile, getZip, readWord} = require('./readFile/getFiles');
-
+const {processFile} = require('./logic/process')
 
 
 
@@ -32,9 +32,9 @@ async function main() {
   const footers = await getFile(zip, 'footer1.xml')
 
 
-  const processedBody = simpleReplacement.replaceTagsWithValue(mainBody, data, logs);
-  const processedFooters = simpleReplacement.replaceTagsWithValue(headers, data, logs);
-  const processedHeaders = simpleReplacement.replaceTagsWithValue(footers, data, logs);
+  const processedBody = processFile(mainBody, data, logs);
+  const processedFooters = processFile(headers, data, logs);
+  const processedHeaders = processFile(footers, data, logs);
 
 
 
@@ -68,13 +68,12 @@ async function writeFinalResult(zip) {
       const endTime = performance.now();
       // Calculate and log the execution time
       const executionTime = endTime - startTime;
-      console.log(`Script execution time: ${executionTime} milliseconds`);
+      console.log(`Script execution time: ${Math.round(executionTime)} milliseconds`);
     });
 }
 
 
 async function writeLog(logs) {
-  console.log('logs length ', logs.length)
   if (logs.length > 0) {
     logs = logs.join('\n');
     await Bun.write("ERRORS.log", logs);
