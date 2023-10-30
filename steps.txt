@@ -1,5 +1,13 @@
-1.TEST FOOTERS = Couldnt replace values maybe they are in a different value than document.xml;
-LOOK WHERE FOOTERS ARE AND THINK OF A SYSTEM FOR DIFFERENTS TAGS
+TAGS IN MY TEMPLATE
+simple value = {lastName}
+loops = {@foreach(array)} (#if(true)) The value is true {value} {#else} We need the property {#endif}  {@endforeach}
+conditionals = {#if(array.length==0)}   {#else}    {#endif}
+***MISSING IMPORT FILES METHOD AND TAG***
+Upgrade conditionals so it lets you call the methods that object has like trim(), toLowerCase(), etc
+Multiple conditions in one if;
+
+
+
 2. Come up with tag names for conditionals, loops, and only swapping for a value
 3. Detect if the command only wants to replace a value, or if the command is an array and wants to access its properties or if the command is calling a fn like name|pascal or check if they are calling a property of the object like array.length, let them add an if if array[2] is false or something like that;
 4. Add conditionals;

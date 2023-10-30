@@ -80,6 +80,9 @@ function parseTag(tag) {
 
 
 module.exports = {
-    replaceTagsWithValue
+    replaceTagsWithValue,
+    removeXmlTags,
+    removeWhiteSpaces,
+    removeCurlyBraces
 }
 
