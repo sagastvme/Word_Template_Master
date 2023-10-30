@@ -8,7 +8,6 @@ function processConditionals(file, data) {
         // Evaluate the condition
    
         const isConditionTrue = evaluateCondition(condition, data);
-        console.log('if ', ifContent)
         // Return the appropriate content based on the condition
         return isConditionTrue ? ifContent : elseContent;
     });
@@ -17,11 +16,13 @@ function processConditionals(file, data) {
 }
 
 function evaluateCondition(condition, data) {
+    console.log('not found condition lol')
     // Split the condition into parts based on the conditional symbols
     const parts = condition.split(/(==|>=|<=|!=)/);
 
     // Trim and sanitize the parts
-    const sanitizedParts = parts.map(part => part.trim());
+    const sanitizedParts = parts.map(part => removeXmlTags(part));
+    console.log(sanitizedParts)
     // Evaluate the condition
     if (sanitizedParts.length === 3) {
         const leftOperand = removeXmlTags(sanitizedParts[0]);

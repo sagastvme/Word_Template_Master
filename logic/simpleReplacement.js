@@ -64,6 +64,7 @@ function removeWhiteSpaces(tag) {
 function removeXmlTags(tag) {
     const regex = /<[^>]+>/g;
     tag = tag.replace(regex, '');
+    tag.trim();
     return tag
 }
 
