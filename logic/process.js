@@ -1,6 +1,7 @@
 const {replaceTagsWithValue} = require('./simpleReplacement')
 function processFile(file, data, logs){
-replaceTagsWithValue(file, data , logs)
+file =  replaceTagsWithValue(file, data , logs)
+return file;
 }
 
 
