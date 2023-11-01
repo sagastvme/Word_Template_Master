@@ -54,7 +54,99 @@ async function main() {
 
 
 async function packFinalResult(zip, processedBody, processedHeaders, processedFooters) {
-  await zip.file('word/document.xml', processedBody);
+  let random = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+  <w:document xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    xmlns:w10="urn:schemas-microsoft-com:office:word"
+    xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+    xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+    xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+    xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+    xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" mc:Ignorable="w14 wp14 w15">
+    <w:body>
+      <w:p>
+        <w:pPr>
+          <w:pStyle w:val="Normal" />
+          <w:spacing w:before="0" w:after="200" />
+          <w:rPr>
+            <w:sz w:val="48" />
+            <w:szCs w:val="48" />
+          </w:rPr>
+        </w:pPr>
+        <w:r>
+          <w:rPr>
+            <w:sz w:val="48" />
+            <w:szCs w:val="48" />
+          </w:rPr>
+          
+         
+            <w:t>Item 1</w:t>
+            
+          
+         
+            <w:t>Item 2</w:t>
+            
+          
+         
+            <w:t>Item 3</w:t>
+            
+              <w:t>Im the last element lol </w:t>
+            
+          
+          
+        </w:r>
+      </w:p>
+      <w:p>
+        <w:pPr>
+          <w:pStyle w:val="Normal" />
+          <w:spacing w:before="0" w:after="200" />
+          <w:rPr>
+            <w:sz w:val="48" />
+            <w:szCs w:val="48" />
+          </w:rPr>
+        </w:pPr>
+        <w:r>
+          <w:rPr>
+            <w:sz w:val="48" />
+            <w:szCs w:val="48" />
+          </w:rPr>
+          <w:t>methods without parenthesis</w:t>
+        </w:r>
+      </w:p>
+      <w:p>
+        <w:pPr>
+          <w:pStyle w:val="Normal" />
+          <w:spacing w:before="0" w:after="200" />
+          <w:rPr>
+            <w:sz w:val="48" />
+            <w:szCs w:val="48" />
+          </w:rPr>
+        </w:pPr>
+        <w:r>
+          <w:rPr>
+            <w:sz w:val="48" />
+            <w:szCs w:val="48" />
+          </w:rPr>
+          <w:t></w:t>
+        </w:r>
+      </w:p>
+      <w:sectPr>
+        <w:headerReference w:type="default" r:id="rId2" />
+        <w:footerReference w:type="default" r:id="rId3" />
+        <w:type w:val="nextPage" />
+        <w:pgSz w:w="11906" w:h="16838" />
+        <w:pgMar w:left="1701" w:right="850" w:gutter="0" w:header="709" w:top="1134" w:footer="709" w:bottom="1134" />
+        <w:pgNumType w:fmt="decimal" />
+        <w:formProt w:val="false" />
+        <w:textDirection w:val="lrTb" />
+        <w:docGrid w:type="default" w:linePitch="360" w:charSpace="0" />
+      </w:sectPr>
+    </w:body>
+  </w:document>`
+  await zip.file('word/document.xml', random);
   await zip.file('word/header1.xml', processedHeaders);
   await zip.file('word/footer1.xml', processedFooters);
 }
