@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/sagastvme/wordTemplater#readme",
   "dependencies": {
+    "handlebars": "^4.7.8",
     "jszip": "^3.10.1",
     "libreoffice-convert": "^1.4.1",
     "mammoth": "^1.6.0",
