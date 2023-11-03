@@ -40,7 +40,7 @@
                 } else if (index === array.length - 1) {
                   return 'last ' + char;
                 } else {
-                  return 'ghost' ;
+                  return 'what happens when i do this ' ;
                 }
               }) }}
         </w:p>
