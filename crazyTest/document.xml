@@ -26,8 +26,13 @@
                 <w:rPr></w:rPr>
             </w:pPr>
             <w:r>
-                <w:t xml:space="preserve">{{message.trim()</w:t>}}
+                <w:t xml:space="preserve">{{message.trim()==='Hola' ? 'no' : `si ${message.toUpperCase()}`</w:t>}}
             </w:r>
+            {{ if(!message){
+                'Hola'
+            }else{
+                'No'
+            } }}
             <w:r></w:r>
         </w:p>
         <w:sectPr>

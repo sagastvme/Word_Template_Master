@@ -14,21 +14,37 @@ console.log(processedTemplate)
 
 function replaceTags(fileContent) {
   const pattern = /{{(.*?)}}/gs;
-  const matches = templateSource.match(pattern);
+  const matches = fileContent.match(pattern);
   if (!matches) {
-      return fileContent;
+    return fileContent;
   }
   matches.forEach(match => {
-      let placeholder = match.match(/{{(.*?)}}/)[1]; // Extract the placeholder name
+    let placeholder = match.trim(); // Trim any leading/trailing spaces
+    if (placeholder.startsWith('{{') && placeholder.endsWith('}}')) {
+       placeholder = placeholder.slice(2, -2).trim(); // Remove the surrounding braces
       placeholder = placeholder.replace(/<[^>]+>/g, '');
-      console.log(placeholder)
-      try{
+      console.log(placeholder);
+      try {
+        let value =  eval(placeholder); // Evaluate the code block
+        fileContent = fileContent.replace(match, value);
+      } catch (error) {
+        console.error(`Could not evaluate code block: ${error}`);
+      }
+    } else {
+      // Handle regular placeholders
+      console.log(placeholder);
+      try {
         let value = eval(placeholder); // Evaluate the placeholder to get its value
-        templateSource = templateSource.replace(match, value); // Replace the placeholder with its value
-
-      }catch(error){
+        fileContent = fileContent.replace(match, value); // Replace the placeholder with its value
+      } catch (error) {
         console.error(`Could not replace ${placeholder}`);
       }
-    });
-    return templateSource;
+    }
+  });
+  return fileContent;
 }
+
+
+
+
+
