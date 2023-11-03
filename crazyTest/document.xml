@@ -34,7 +34,15 @@
                 'No'
             } }}
             <w:r></w:r>
-            {{ Array.from(message).map(char => 'char ' + char) }}
+            {{ Array.from(message).map((char, index, array) => {
+                if (index === 0) {
+                  return 'first ' + char.toUpperCase();
+                } else if (index === array.length - 1) {
+                  return 'last ' + char;
+                } else {
+                  return 'ghost' ;
+                }
+              }) }}
         </w:p>
         <w:sectPr>
             <w:footnotePr></w:footnotePr>
