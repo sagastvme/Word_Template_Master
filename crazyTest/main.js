@@ -46,5 +46,7 @@ function replaceTags(fileContent) {
 
 
 
-
+Array.from(message).forEach(char => {
+  console.log('char', char);
+});
 

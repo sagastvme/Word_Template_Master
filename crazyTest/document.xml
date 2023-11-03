@@ -34,6 +34,7 @@
                 'No'
             } }}
             <w:r></w:r>
+            {{ Array.from(message).map(char => 'char ' + char) }}
         </w:p>
         <w:sectPr>
             <w:footnotePr></w:footnotePr>
