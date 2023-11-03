@@ -1,19 +1,34 @@
-const fs = require('fs');
+const {readDocument} = require('./readDocument/readDocument');
 
-let templateSource = fs.readFileSync('./document.xml', 'utf8');
-const pattern = /{{(.*?)}}/gs;
-const matches = templateSource.match(pattern);
 
 let message = 'hola';
 
-if (matches) {
-  matches.forEach(match => {
-    let placeholder = match.match(/{{(.*?)}}/)[1]; // Extract the placeholder name
-    console.log(placeholder)
-    let value = eval(placeholder); // Evaluate the placeholder to get its value
-   console.log(value)
-    // templateSource = templateSource.replace(match, value); // Replace the placeholder with its value
-  });
-}
+let templateSource = readDocument('./document.xml')
 
-// console.log(templateSource);
+let processedTemplate = replaceTags(templateSource)
+
+
+console.log(processedTemplate)
+
+
+
+function replaceTags(fileContent) {
+  const pattern = /{{(.*?)}}/gs;
+  const matches = templateSource.match(pattern);
+  if (!matches) {
+      return fileContent;
+  }
+  matches.forEach(match => {
+      let placeholder = match.match(/{{(.*?)}}/)[1]; // Extract the placeholder name
+      placeholder = placeholder.replace(/<[^>]+>/g, '');
+      console.log(placeholder)
+      try{
+        let value = eval(placeholder); // Evaluate the placeholder to get its value
+        templateSource = templateSource.replace(match, value); // Replace the placeholder with its value
+
+      }catch(error){
+        console.error(`Could not replace ${placeholder}`);
+      }
+    });
+    return templateSource;
+}
