@@ -1,1 +1,2 @@
 rethink project
+dont knnow if i should use logicinside a template
